@@ -1,0 +1,43 @@
+---
+name: Deliver with PostgreSQL 9.3
+description: Deliver with PostgreSQL 9.3
+keywords: deliver, postgres, postgresql, all
+recommended: 
+type: Deliver
+documentation: |
+  Deliver with PostgreSQL 9.3
+  =========
+  
+images:
+- category: DB
+  name: PostgreSQL
+  source: shadow/centos-postgresql:latest
+  description: 
+  type: Default
+  expose: []
+  ports:
+  - host_port: '5432'
+    container_port: '5432'
+    proto: TCP
+  links: []
+  environment: []
+  volumes:
+  - host_path: "/home/core/datos/db/postgresql/"
+    container_path: "/var/lib/pgsql/9.3/"
+- category: Web
+  name: Deliver
+  source: shadow/centos-php-deliver:latest
+  description: 
+  type: Default
+  expose: ['80']
+  ports:
+  - container_port: '80'
+    proto: TCP
+  links:
+  - service: PostgreSQL
+    alias: POSTGRESQL
+  environment: []
+  volumes:
+  - host_path: "/home/core/code/deliver/"
+    container_path: "/app"
+  command: './start.sh'
